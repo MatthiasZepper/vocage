@@ -1,4 +1,10 @@
-on: workflow_dispatch
+name: Build binaries
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
 
 jobs:
   release:
@@ -35,5 +41,14 @@ jobs:
           path: |
             ${{ steps.compile.outputs.BUILT_ARCHIVE }}
             ${{ steps.compile.outputs.BUILT_CHECKSUM }}
+      - name: Upload as release asset 
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+          asset_name: ${{ env.REPO_LOWERCASE }}_${{ matrix.target }}_${{ matrix.archive }}
 
 
