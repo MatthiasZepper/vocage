@@ -1,10 +1,16 @@
 name: Build binaries
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - GithubBuildAction
+    tags:
+      - 'v*' #if a push with a version tag like v0.0.2 is recorded
   release:
     types: [published]
 
-  workflow_dispatch:
 
 jobs:
   release:
