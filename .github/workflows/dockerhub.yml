@@ -23,6 +23,7 @@ jobs:
       - name: Change repo name to lowercase
         run: |
           echo "REPO_LOWERCASE=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+          echo "REPOTITLE_LOWERCASE=$(basename $REPO_LOWERCASE)" >>${GITHUB_ENV}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -43,7 +44,7 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_LOWERCASE }}:dev
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOTITLE_LOWERCASE }}:dev
             ghcr.io/${{ env.REPO_LOWERCASE }}:dev
             
       - name: Push release image
@@ -52,8 +53,8 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_LOWERCASE }}:${{ github.event.release.tag_name }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_LOWERCASE }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOTITLE_LOWERCASE }}:${{ github.event.release.tag_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOTITLE_LOWERCASE }}:latest
             ghcr.io/${{ env.REPO_LOWERCASE }}:${{ github.event.release.tag_name }}
             ghcr.io/${{ env.REPO_LOWERCASE }}:${{ github.sha }}
             ghcr.io/${{ env.REPO_LOWERCASE }}:latest
