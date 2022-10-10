@@ -20,17 +20,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu
-            archive: zip
+          #- target: x86_64-pc-windows-gnu
+          #  archive: zip
+          #  mime: application/vnd.microsoft.portable-executable
           - target: x86_64-unknown-linux-musl
             archive: tar.gz tar.xz
-        #- target: x86_64-apple-darwin
-        #   archive: zip
+            mime: application/x-elf
+          - target: x86_64-apple-darwin
+            archive: zip
+            mime: application/x-elf
     steps:
       - uses: actions/checkout@v2
       - name: Change repo name to lowercase
         run: |
-          echo "REPO_LOWERCASE=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+          REPO_LOWERCASE=${GITHUB_REPOSITORY,,}
+          echo "${REPO_LOWERCASE}" >>${GITHUB_ENV}
           echo "REPOTITLE_LOWERCASE=$(basename $REPO_LOWERCASE)" >>${GITHUB_ENV}
       - name: Compile and release
         id: compile
@@ -57,5 +61,6 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ${{ steps.compile.outputs.BUILT_ARCHIVE }}
           asset_name: ${{ env.REPOTITLE_LOWERCASE }}_${{ matrix.target }}_${{ matrix.archive }}
+          asset_content_type: ${{ matrix.mime }}
 
 

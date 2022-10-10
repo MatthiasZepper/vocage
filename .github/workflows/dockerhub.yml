@@ -20,7 +20,8 @@ jobs:
 
       - name: Change repo name to lowercase
         run: |
-          echo "REPO_LOWERCASE=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+          REPO_LOWERCASE=${GITHUB_REPOSITORY,,}
+          echo "${REPO_LOWERCASE}" >>${GITHUB_ENV}
           echo "REPOTITLE_LOWERCASE=$(basename $REPO_LOWERCASE)" >>${GITHUB_ENV}
 
       - name: Log in to Docker Hub
