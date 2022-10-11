@@ -18,6 +18,8 @@ jobs:
     - name: Change repo name to lowercase
       run: |
         echo "REPO_LOWERCASE=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+        echo ${{ env.REPO_LOWERCASE }}
+        echo ${ REPO_LOWERCASE }
         echo "REPOTITLE_LOWERCASE=$(basename ${{ env.REPO_LOWERCASE }})" >>${GITHUB_ENV}
     - name: Build
       uses: actions-rs/cargo@v1
